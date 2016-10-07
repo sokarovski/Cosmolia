@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="../src/Cosmolia.css">
+</head>
+<body>
+
+    <div role="gallery">
+        <img src="assets/img/1.jpg" />
+        <img src="assets/img/2.jpg" />
+        <img src="assets/img/3.jpg" />
+        <img src="assets/img/4.jpg" />
+        <img src="assets/img/5.jpg" />
+        <img src="assets/img/6.jpg" />
+    </div>
+
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+    <script src="../src/PS.js"></script>
+    <script src="../src/PS/Class.js"></script>
+
+    <script src="../src/Cosmolia.js"></script>
+    <script src="../src/Cosmolia/Renderers.js"></script>
+
+    <script src="../src/Cosmolia/Renderers/Basic.js"></script>
+    <script src="../src/Cosmolia/Renderers/Opacity.js"></script>
+    <script src="../src/Cosmolia/Renderers/Scroll.js"></script>
+    <script src="../src/Cosmolia/Renderers/ScrollThumb.js"></script>
+    <script src="../src/Cosmolia/Renderers/Slide.js"></script>
+
+    <script>
+        jQuery('div[role=gallery]').Cosmolia();
+    </script>
+    
+</body>
+</html>
