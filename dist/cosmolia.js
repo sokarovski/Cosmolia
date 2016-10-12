@@ -1,48 +1,10 @@
 'use strict';
 
-exports.__esModule = true;
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _Renderers = require('./Renderers.js');
-
-var _Renderers2 = _interopRequireDefault(_Renderers);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } /** Class representing a point. */
-
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Cosmolia = function () {
-    function Cosmolia(parent, opts) {
-        _classCallCheck(this, Cosmolia);
-
-        opts = opts || {};
-
-        this.data = {};
-        this.html = {};
-        this.images = [];
-        this.rendering = true;
-        this.started = false;
-        this.parent = jQuery(parent);
-        this.autoplay = opts.autoplay !== false;
-        this.parser = opts.parser || null;
-
-        this.initResponsive();
-        this.parseImages();
-        this.buildLayout();
-        this.layout(opts);
-
-        if (this.autoplay) this.start();
-    }
-
-    /* @PRAGMA Basic Encapsulation ========================================== */
-
-    /**
-     * Sets the renderer to be used for rendering the gallery
-     * @param {Cosmolia.Renderers} renderer that is going to be used
-     */
-
 
     /* @PRAGMA Initialization =============================================== */
 
@@ -75,8 +37,30 @@ var Cosmolia = function () {
     // html = null;
     // started = false;
     // rendering = null;
-    // 
 
+    function Cosmolia(parent, opts) {
+        _classCallCheck(this, Cosmolia);
+
+        opts = opts || {};
+
+        this.data = {};
+        this.html = {};
+        this.images = [];
+        this.rendering = true;
+        this.started = false;
+        this.parent = jQuery(parent);
+        this.autoplay = opts.autoplay !== false;
+        this.parser = opts.parser || null;
+
+        this.initResponsive();
+        this.parseImages();
+        this.buildLayout();
+        this.layout(opts);
+
+        if (this.autoplay) this.start();
+    }
+
+    /* @PRAGMA Basic Encapsulation ========================================== */
 
     Cosmolia.prototype.setRenderer = function setRenderer(renderer) {
         this.renderer = renderer;
@@ -681,8 +665,16 @@ var Cosmolia = function () {
     return Cosmolia;
 }();
 
-Cosmolia.Renderers = _Renderers2.default;
-exports.default = Cosmolia;
+Cosmolia.Positions = {
+    TOP: 1,
+    RIGHT: 2,
+    BOTTOM: 4,
+    LEFT: 8
+};
+Cosmolia.Directions = {
+    VERTICAL: 1,
+    HORIZONTAL: 2
+};
 
 
 jQuery.fn.Cosmolia = Cosmolia.jQueryPlugin;
@@ -710,32 +702,12 @@ Cosmolia.Positions = {
   BOTTOM: 4,
   LEFT: 8
 };
+"use strict";
+
+Cosmolia.Renderers = {};
 'use strict';
 
-exports.__esModule = true;
-
-var _Basic = require('./Renderers/Basic.js');
-
-var _Basic2 = _interopRequireDefault(_Basic);
-
-var _Scroll = require('./Renderers/Scroll.js');
-
-var _Scroll2 = _interopRequireDefault(_Scroll);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Cosmolia.Renderers holds all the avaliable renderers that can render a gallery.
- * @namespace
- */
-exports.default = {
-  Basic: _Basic2.default,
-  Scroll: _Scroll2.default
-};
-'use strict';
-
-exports.__esModule = true;
-exports.default = {
+Cosmolia.Renderers.Basic = {
 
     willRotate: function willRotate(gallery) {
         gallery.html.imageSpan.css(gallery.directionDictionary.left, null);
@@ -863,8 +835,7 @@ Cosmolia.Renderers.Opacity = {
 };
 'use strict';
 
-exports.__esModule = true;
-exports.default = {
+Cosmolia.Renderers.Scroll = {
 
     willRotate: function willRotate(gallery) {
         gallery.html.imagesSpan.css(gallery.directionDictionary.left, '');
