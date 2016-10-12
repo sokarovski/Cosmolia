@@ -1,0 +1,27 @@
+{
+  "name": "cosmolia",
+  "description": "Javascript Scroller / Carousel / Image Gallery",
+  "main": [
+    "dist/cosmolia.min.js"
+    "dist/cosmolia.min.css"
+  ],
+  "authors": [
+    "Petar Sokarovski"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "gallery",
+    "carousel"
+  ],
+  "homepage": "https://github.com/sokarovski/Cosmolia",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "1.9.1 - 3",
+  }
+}

@@ -1,4 +1,3 @@
-
 Cosmolia.Renderers.Scroll = {
 
     willRotate: function(gallery) {
@@ -47,7 +46,6 @@ Cosmolia.Renderers.Scroll = {
     },
 
     change: function(gallery, index, animated, animate, through) {
-        console.log(index);
         gallery.willStartSwitchingSlide(index, animated);
         if (animate) {
             var callback;
@@ -60,7 +58,6 @@ Cosmolia.Renderers.Scroll = {
             var hash = {};
             hash[gallery.directionDictionary.left] = (-1*(through+gallery.offset)*gallery.itemsWidth)+'%';
             gallery.html.imagesSpan.animate(hash, gallery.animationSpeed ,callback);
-            console.log(index);
         } else {
             gallery.html.imagesSpan.css(gallery.directionDictionary.left, (-1*(index+gallery.offset)*gallery.itemsWidth)+'%' );
             gallery.didEndSwitchingSlide(index, animated);

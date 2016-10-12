@@ -1,49 +1,57 @@
-var Cosmolia = PS.Class({
+class Cosmolia {
 
     /* @PRAGMA Initialization =============================================== */
 
-    parent: null,
-    images: null,
+    //@TODO Not needed in babel kept for documenting
 
-    selectedIndex: 0,
-    renderer: null,
-    parser: null,
+    // parent = null;
+    // images = null;
+    // selectedIndex = 0;
+    // renderer = null;
+    // parser = null;
+    // hasControlButtons = null;
+    // pauseOnHover = null;
+    // interval = null;
+    // animationSpeed = null;
+    // fixedProportion = null;
+    // relativeProportion = null;
+    // direction = null; //VERTICAL; HORIZONTAL;
+    // directionDictionary = null;
+    // data = null;
+    // carousel = null;
+    // carouselPosition = null; //TOP; RIGHT; BOTTOM; LEFT;
+    // carouselFixedProportion = null;
+    // carouselRelativeProportion = null;
+    // items = null;
+    // paused = null;
+    // reseponsive = null;
+    // offset = null;
+    // carouselOffset = null;
+    // timer = null;
+    // html = null;
+    // started = false;
+    // rendering = null;
+    
+    static Positions = {
+        TOP:        1,
+        RIGHT:      2,
+        BOTTOM:     4,
+        LEFT:       8
+    };
 
-    hasControlButtons: null,
-    pauseOnHover: null,
-    interval: null,
-    animationSpeed: null,
-    fixedProportion: null,
-    relativeProportion: null,
-    direction: null, //VERTICAL, HORIZONTAL,
-    directionDictionary: null,
-    data: null,
-    carousel: null,
-    carouselPosition: null, //TOP, RIGHT, BOTTOM, LEFT,
-    carouselFixedProportion: null,
-    carouselRelativeProportion: null,
-    items: null,
-    paused: null,
+    static Directions = {
+        VERTICAL:   1,
+        HORIZONTAL: 2
+    };
 
-    reseponsive: null,
-
-    offset: null,
-    carouselOffset: null,
-
-    /* @PRIVATE */
-    timer: null,
-    html: null,
-    started: false,
-
-    rendering: null,
-
-    init: function(parent, opts) {
+    constructor(parent, opts) {
         opts = opts || {};
 
         this.data = {};
         this.html = {};
         this.images = [];
         this.rendering = true;
+        this.started = false;
         this.parent = jQuery(parent);
         this.autoplay = opts.autoplay !== false;
         this.parser = opts.parser || null;
@@ -53,62 +61,60 @@ var Cosmolia = PS.Class({
         this.buildLayout();
         this.layout(opts);
 
-        if (this.autoplay) {
+        if (this.autoplay) 
             this.start();
-        }
-
-        console.log(this);
-    },
+    }
+    
 
     /* @PRAGMA Basic Encapsulation ========================================== */
 
-    setRenderer: function(renderer) {
+    setRenderer(renderer) {
         this.renderer = renderer;
         this.layoutImages();
-    },
+    }
 
-    setImages: function(images) {
+    setImages(images) {
         this.images = images;
         if (this.carousel) {
             this.carousel.setImages(images);
         }
         this.selectedIndex = 0;
         this.layoutImages();
-    },
+    }
 
-    addImage: function(image) {
+    addImage(image) {
         this.images.push(image);
         this.layoutImages();
-    },
+    }
 
-    clearImages: function() {
+    clearImages() {
         this.images = [];
         if (this.carousel) {
             this.carousel.setImages(this.images);
         }
         this.selectedIndex = 0;
         this.layoutImages();
-    },
+    }
 
-    setShowInfo: function(isVisible) {
+    setShowInfo(isVisible) {
         this.showInfo = isVisible;
         if (isVisible) {
             this.html.wrapper.removeClass('cosmolia-st-no-info');
         } else {
             this.html.wrapper.addClass('cosmolia-st-no-info');
         }
-    },
+    }
 
-    setShowCounter: function(isVisible) {
+    setShowCounter(isVisible) {
         this.showCounter = isVisible;
         if (this.showCounter) {
             this.html.wrapper.removeClass('cosmolia-st-no-counter');
         } else {
             this.html.wrapper.addClass('cosmolia-st-no-counter');
         }
-    },
+    }
 
-    setPauseOnHover: function(shouldPause) {
+    setPauseOnHover(shouldPause) {
         if (this.pauseOnHover == shouldPause) {
             return;
         }
@@ -119,26 +125,25 @@ var Cosmolia = PS.Class({
             this.html.wrapper.on('mouseenter.cosmolia', this.pausePlay.bind(this));
             this.html.wrapper.on('mouseleave.cosmolia', this.continuePlay.bind(this));
         }
-    },
+    }
 
-    setCarouselPosition: function(position) {
+    setCarouselPosition(position) {
         if (position) {
-            position = position.toLowerCase();
             this.carouselPosition = position;
             var carousel = this.getCarousel();
             carousel.haltRendering();
 
-            if (position == 'bottom') {
+            if (position & Cosmolia.Positions.BOTTOM) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection('HORIZONTAL');
+                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position == 'top') {
+            } else if (position & Cosmolia.Positions.TOP) {
                 this.html.wrapper.prepend(carousel.html.wrapper);
-                this.carousel.setDirection('HORIZONTAL');
+                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position == 'left' || position == 'right') {
+            } else if (position & (Cosmolia.Directions.LEFT | Cosmolia.Directions.RIGHT) ) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection('VERTICAL');
+                this.carousel.setDirection(Cosmolia.Directions.VERTICAL);
                 this.carousel.setProportion('100%');
             }
 
@@ -157,9 +162,9 @@ var Cosmolia = PS.Class({
             }
         }
 
-    },
+    }
 
-    setHasControllButtons: function(isVisible) {
+    setHasControllButtons(isVisible) {
         this.hasControlButtons = isVisible;
         if (this.hasControlButtons) {
             this.html.prevButton.show();
@@ -168,9 +173,9 @@ var Cosmolia = PS.Class({
             this.html.prevButton.hide();
             this.html.nextButton.hide();
         }
-    },
+    }
 
-    setSlideData: function(slide, index) {
+    setSlideData(slide, index) {
         var image = this.images[index];
         if (image) {
             slide.css('background-image', "url('"+image.src+"')");
@@ -189,9 +194,9 @@ var Cosmolia = PS.Class({
             }
 
         }
-    },
+    }
 
-    setProportion: function(fixedProportion, relativeProportion) {
+    setProportion(fixedProportion, relativeProportion) {
         this.fixedProportion = fixedProportion;
         this.relativeProportion = relativeProportion;
         if (!fixedProportion && !relativeProportion) {
@@ -225,50 +230,50 @@ var Cosmolia = PS.Class({
                 height: ''
             });
         }
-    },
+    }
 
-    setCarouselProportion: function(fixedProportion, relativeProportion) {
+    setCarouselProportion(fixedProportion, relativeProportion) {
         this.carouselFixedProportion = fixedProportion;
         this.carouselRelativeProportion = relativeProportion;
         if (this.carousel) {
-            if (this.carouselPosition == 'left' || this.carouselPosition == 'right') {
+            if (this.carouselPosition & (Cosmolia.Positions.LEFT | Cosmolia.Positions.RIGHT)) {
                 this.placeCarousel();
             } else {
                 this.carousel.setProportion(fixedProportion, relativeProportion);
             }
 
         }
-    },
+    }
 
-    setItems: function(items) {
+    setItems(items) {
         this.html.wrapper.removeClass('cosmolia-cp-items-1 cosmolia-cp-items-2 cosmolia-cp-items-3 cosmolia-cp-items-4');
         this.html.wrapper.addClass('cosmolia-cp-items-'+items);
         this.items = items;
         this.itemsWidth = (100/items);
         this.layoutImages();
-    },
+    }
 
-    setCarouselItems: function(items) {
+    setCarouselItems(items) {
         this.carouselItems = items;
         if (this.carousel) {
             this.carousel.setItems(items);
         }
-    },
+    }
 
-    setOffset: function(offset) {
+    setOffset(offset) {
         this.offset = offset;
         if (this.rendering) {
             this.renderer.switchTo(this, this.selectedIndex);
         }
-    },
+    }
 
-    setCarouselOffset: function(offset) {
+    setCarouselOffset(offset) {
         if (this.carousel) {
             this.carousel.setOffset(offset);
         }
-    },
+    }
 
-    setInterval: function(interval) {
+    setInterval(interval) {
         this.interval = interval;
         if (this.started) {
             var pausedWas = this.paused;
@@ -276,50 +281,46 @@ var Cosmolia = PS.Class({
             this.start();
             this.paused = pausedWas;
         }
-    },
+    }
 
-    setAnimationSpeed: function(animationSpeed) {
+    setAnimationSpeed(animationSpeed) {
         this.animationSpeed = animationSpeed;
-    },
+    }
 
-    setDirection: function(direction) {
-        if (direction != null && direction != undefined) {
-            direction = new String(direction).toLowerCase();
-            this.direction = direction;
+    setDirection(direction) {
+        if (!direction)
+            return;
 
-            if (this.renderer) {
-                this.renderer.willRotate(this);
-            }
+        this.direction = direction;
 
-            if (direction == 'vertical') {
-                this.directionDictionary = {'left': 'top', 'width': 'height'};
-            } else {
-                this.direction == 'horizontal'
-                this.directionDictionary = {'left': 'left', 'width': 'width'};
-            }
-        }
+        if (this.renderer) 
+            this.renderer.willRotate(this);
+        
+        if (direction == Cosmolia.Directions.VERTICAL)
+            this.directionDictionary = {'left': 'top', 'width': 'height'};
+        else if (direction == Cosmolia.Directions.HORIZONTAL)
+            this.directionDictionary = {'left': 'left', 'width': 'width'};
+    }
 
-    },
-
-    setOnImageClick: function(callback) {
+    setOnImageClick(callback) {
         if (this.onImageClick != null && callback != null) {
             this.onImageClick = callback;
         } else if (this.onImageClick != callback) {
             this.onImageClick = callback;
             this.layoutImages();
         }
-    },
+    }
 
-    setImageContain: function(enabled) {
+    setImageContain(enabled) {
         this.imageContain = enabled;
         if (enabled) {
             this.html.wrapper.addClass('cosmolia-images-style-contain');
         } else {
             this.html.wrapper.removeClass('cosmolia-images-style-contain');
         }
-    },
+    }
 
-    setResponsive: function(responsive) {
+    setResponsive(responsive) {
         if (responsive && !this.isResponsiveSet) {
             jQuery(window).on('resize', this.responsiveHandler);
             this.lastWindowSize = 0;
@@ -330,18 +331,18 @@ var Cosmolia = PS.Class({
             this.isResponsiveSet = false;
             this.calculateImagesVisibility(10000000);
         }
-    },
+    }
 
-    initResponsive: function() {
+    initResponsive() {
         this.responsiveHandler = this.onWindowResizeResponsive.bind(this);
-    },
+    }
 
-    onWindowResizeResponsive: function() {
+    onWindowResizeResponsive() {
         var newWidth = jQuery(window).width();
         this.calculateImagesVisibility(newWidth);
-    },
+    }
 
-    calculateImagesVisibility: function(newWidth) {
+    calculateImagesVisibility(newWidth) {
         if (this.lastWindowSize != 1 && newWidth < 769) {
             this.lastWindowSize = 1;
             this.setItems(1);
@@ -349,11 +350,11 @@ var Cosmolia = PS.Class({
             this.lastWindowSize = 2;
             this.setItems(3);
         }
-    },
+    }
 
     /* @PRAGMA Layout Organization ========================================== */
 
-    buildLayout: function() {
+    buildLayout() {
 
         var wrapper = jQuery('<div class="cosmolia-wrapper"></div>');
         var imagesPositioner = jQuery('<div class="cosmolia-images-positioner"></div>');
@@ -384,14 +385,14 @@ var Cosmolia = PS.Class({
 
         this.parent.empty();
         this.parent.append(wrapper);
-    },
+    }
 
-    layout: function(opts) {
+    layout(opts) {
         opts = opts || {};
 
         this.haltRendering();
 
-        this.setDirection(opts.direction || 'horizontal');
+        this.setDirection(opts.direction || Cosmolia.Directions.HORIZONTAL);
         this.setRenderer(opts.renderer || Cosmolia.Renderers.Scroll);
         this.setInterval(opts.interval || 4000);
         this.setAnimationSpeed(opts.animationSpeed || 300);
@@ -413,15 +414,15 @@ var Cosmolia = PS.Class({
         this.resumeRendering();
 
         this.layoutImages();
-    },
+    }
 
-    layoutImages: function() {
+    layoutImages() {
         if (this.rendering) {
             this.renderer.layout(this);
         }
-    },
+    }
 
-    createSlide: function() {
+    createSlide() {
         var slide = jQuery('<a class="cosmolia-item"></a>');
         var meta = jQuery('<div class="cosmolia-item-meta"></div>');
         var title = jQuery('<div class="cosmolia-item-title"></div>');
@@ -434,9 +435,9 @@ var Cosmolia = PS.Class({
         meta.append(description);
 
         return slide;
-    },
+    }
 
-    getCarousel: function() {
+    getCarousel() {
         if (this.carousel) {
             this.carousel.setImages(this.images);
             return this.carousel;
@@ -457,11 +458,11 @@ var Cosmolia = PS.Class({
         });
         this.carousel.setImages(this.images);
         return this.carousel;
-    },
+    }
 
     /* @PRAGMA Default Parser =============================================== */
 
-    parseImages: function() {
+    parseImages() {
         if (this.parser) {
             this.parser(this.parent, this.images);
             return null;
@@ -485,23 +486,23 @@ var Cosmolia = PS.Class({
             this.carousel.images = result;
         }
 
-    },
+    }
 
     /* @PRAGMA Internal Control Functions =================================== */
 
-    imageWasClicked: function(index, image) {
+    imageWasClicked(index, image) {
         this.onImageClick(index, image);
-    },
+    }
 
-    getNextIndex: function() {
+    getNextIndex() {
         return this.moduloIndex(this.selectedIndex+1);
-    },
+    }
 
-    getPreviousIndex: function() {
+    getPreviousIndex() {
         return this.moduloIndex(this.selectedIndex-1);
-    },
+    }
 
-    moduloIndex: function(index) {
+    moduloIndex(index) {
         if (index < 0) {
             while(index < 0 && this.images.length > 0) {
                 index += this.images.length;
@@ -509,89 +510,88 @@ var Cosmolia = PS.Class({
         }
 
         return Math.abs(index%this.images.length);
-    },
+    }
 
-    evaluateCarouselProportion: function() {
+    evaluateCarouselProportion() {
         if (this.carouselFixedProportion != null) {
             return this.carouselFixedProportion;
         } else if (this.carouselRelativeProportion != null) {
             return (this.carouselRelativeProportion*100)+'%';
         }
         return '50px;'
-    },
+    }
 
-    placeCarousel: function() {
+    placeCarousel() {
         var position = this.carouselPosition;
         var factor = this.evaluateCarouselProportion();
         var margins = {'margin-left':'0', 'margin-right':'0'};
         var width = '';
-        switch(position) {
-            case 'right':
-                margins['margin-right'] = factor;
-                width = factor;
-            break;
-            case 'left':
-                margins['margin-left'] = factor;
-                width = factor;
-            break;
+        if (position & Cosmolia.Positions.LEFT) {
+            margins['margin-right'] = factor;
+            width = factor;
         }
+        if (position & Cosmolia.Positions.RIGHT) {
+            margins['margin-left'] = factor;
+            width = factor;
+        }
+        
         this.html.imagesPositioner.css(margins);
 
         if (this.carousel) {
             this.carousel.html.wrapper.css('width', width);
         }
-    },
+    }
 
     /* @PRAGMA Control Functions ============================================ */
 
-    switchTo: function(index) {
+    switchTo(index) {
         this.renderer.switchTo(this, index);
-    },
+    }
 
-    moveTo: function(index) {
+    moveTo(index) {
         this.renderer.moveTo(this, index);
-    },
+    }
 
-    next: function() {
+    next() {
         this.renderer.next(this);
-    },
+    }
 
-    prev: function() {
+    prev() {
         this.renderer.prev(this);
-    },
+    }
 
-    start: function() {
+    start() {
         if (this.started) {
             return;
         }
         this.timer = setInterval(this.step.bind(this), this.interval);
         this.started = true;
         this.paused = false;
-    },
+    }
 
-    stop: function() {
+    stop() {
         clearInterval(this.timer);
         this.started = false;
         this.paused = true;
-    },
+    }
 
-    pausePlay: function() {
+    pausePlay() {
         this.paused = true;
-    },
+    }
 
-    continuePlay: function() {
+    continuePlay() {
         this.paused = false;
-    },
+    }
 
-    step: function() {
+    step() {
         if (!this.paused) {
             this.next();
         }
-    },
+    }
 
     /* @PRAGMA Renderer Delegate Implementations ============================ */
 
-    willStartSwitchingSlide: function(toIndex, animated) {
+    willStartSwitchingSlide(toIndex, animated) {
         this.selectedIndex = toIndex || 0;
         if (this.carousel) {
             if (animated) {
@@ -603,89 +603,86 @@ var Cosmolia = PS.Class({
 
         //This logic should be moved inside the renderers
         this.clearActiveSlide();
-    },
+    }
 
-    didEndSwitchingSlide: function(toIndex, animated) {
+    didEndSwitchingSlide(toIndex, animated) {
         //This logic should be moved inside the renderers
         this.markActiveSlide(toIndex);
-    },
+    }
 
     /* @PRAGMA Rendere Controll ============================================= */
 
-    haltRendering: function() {
+    haltRendering() {
         this.rendering = false;
-    },
+    }
 
-    resumeRendering: function() {
+    resumeRendering() {
         this.rendering = true;
-    },
+    }
 
     /* @PRAGMA Mark Active Slide ============================================ */
 
-    clearActiveSlide: function() {
+    clearActiveSlide() {
         //This logic should be moved inside the renderers
         this.html.imagesSpan.find('.cosmolia-active-slide').removeClass('cosmolia-active-slide');
-    },
+    }
 
-    markActiveSlide: function(index) {
+    markActiveSlide(index) {
         //This logic should be moved inside the renderers
         var element = this.getSlideFromCache(index);
         if (element)
             element.addClass('cosmolia-active-slide');
-    },
+    }
 
     /* @PRAGMA Slide Caching for The renderer =============================== */
 
-    resetSlideCache: function() {
+    resetSlideCache() {
         this.data.slideCaches = {};
-    },
+    }
 
-    addSlideToCache: function(index, slide) {
+    addSlideToCache(index, slide) {
         this.data.slideCaches['cache_' + index] = slide;
-    },
+    }
 
-    getSlideFromCache: function(index) {
+    getSlideFromCache(index) {
         if (this.data.slideCaches['cache_' + index])
             return this.data.slideCaches['cache_' + index];
     }
 
-});
 
-// /**
-//  * Creating the jQuery hook
-//  */
-jQuery.fn.Cosmolia = function( methodOrOptions ) 
-{
+    static jQueryPlugin( methodOrOptions ) {
 
-    if (!$(this).length) {
-        return $(this);
-    }
-    var instance = $(this).data('Cosmolia');
-        
-    // CASE: action method (public method on PLUGIN class)        
-    if ( instance 
-            && methodOrOptions.indexOf('_') != 0 
-            && instance[ methodOrOptions ] 
-            && typeof( instance[ methodOrOptions ] ) == 'function' ) {
-        
-        return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
+        if (!jQuery(this).length) {
+            return jQuery(this);
+        }
+
+        var instance = jQuery(this).data('Cosmolia');
             
+        // CASE: action method (public method on PLUGIN class)        
+        if ( instance 
+                && methodOrOptions.indexOf('_') != 0 
+                && instance[ methodOrOptions ] 
+                && typeof( instance[ methodOrOptions ] ) == 'function' ) {
             
-    // CASE: argument is options object or empty = initialise            
-    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
+            return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
+                
+                
+        // CASE: argument is options object or empty = initialise            
+        } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
 
-        instance = new Cosmolia( $(this), methodOrOptions );    // ok to overwrite if this is a re-init
-        $(this).data( 'Cosmolia', instance );
-        return $(this);
-    
-    // CASE: method called before init
-    } else if ( !instance ) {
-        $.error( 'Cosmolia must be initialised before using method: ' + methodOrOptions );
-    
-    // CASE: invalid method
-    } else if ( methodOrOptions.indexOf('_') == 0 ) {
-        $.error( 'Method ' +  methodOrOptions + ' is private!' );
-    } else {
-        $.error( 'Method ' +  methodOrOptions + ' does not exist.' );
+            instance = new Cosmolia( jQuery(this), methodOrOptions );    // ok to overwrite if this is a re-init
+            jQuery(this).data( 'Cosmolia', instance );
+            return jQuery(this);
+        
+        // CASE: method called before init
+        } else if ( !instance ) {
+            jQuery.error( 'Cosmolia must be initialised before using method: ' + methodOrOptions );
+        
+        // CASE: invalid method
+        } else {
+            jQuery.error( 'Method ' +  methodOrOptions + ' does not exist.' );
+        }
     }
-};
+}
+
+jQuery.fn.Cosmolia = Cosmolia.jQueryPlugin;

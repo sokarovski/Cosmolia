@@ -1,0 +1,126 @@
+.cosmolia-wrapper {
+  position: relative;
+}
+.cosmolia-images-sizer {
+  width: 100%;
+  height: 0;
+  padding-bottom: 67%;
+  position: relative;
+}
+.cosmolia-images-tube {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.cosmolia-images-span,
+.cosmolia-item {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.cosmolia-wrapper .cosmolia-wrapper .cosmolia-item {
+  background-size: cover;
+  border: 5px solid white;
+  opacity: 0.5;
+  transform: scale(0.9);
+  border-radius: 5px;
+}
+.cosmolia-wrapper .cosmolia-wrapper .cosmolia-item:hover {
+  opacity: 1;
+}
+.cosmolia-wrapper .cosmolia-wrapper .cosmolia-item.cosmolia-active-slide {
+  border: 1px solid #ffffff;
+  opacity: 1;
+  transform: scale(0.95);
+  border-radius: 0;
+}
+.cosmolia-wrapper.cosmolia-cp-items-3 .cosmolia-images-sizer {
+  padding-bottom: 25%;
+  height: 0;
+}
+.cosmolia-wrapper.cosmolia-cp-items-1 .cosmolia-images-sizer {
+  padding-bottom: 66.66%;
+  height: 0;
+}
+.cosmolia-item {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /*background-color: #000;*/
+}
+.cosmolia-wrapper > .cosmolia-images-positioner .cosmolia-item {
+  background-size: cover;
+  border: 2px solid white;
+  box-sizing: border-box;
+}
+.bm-popup-wrapper .cosmolia-wrapper > .cosmolia-images-positioner .cosmolia-item {
+  border: 0;
+}
+.cosmolia-wrapper.cosmolia-images-style-contain > .cosmolia-images-positioner .cosmolia-item {
+  background-size: contain;
+}
+.cosmolia-item-meta {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  padding: 11px 21px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+}
+.cosmolia-st-no-info > .cosmolia-images-positioner .cosmolia-item-title,
+.cosmolia-st-no-info > .cosmolia-images-positioner .cosmolia-item-description {
+  display: none;
+}
+.cosmolia-st-no-counter > .cosmolia-images-positioner .cosmolia-item-counter {
+  display: none;
+}
+.cosmolia-st-no-info.cosmolia-st-no-counter > .cosmolia-images-positioner .cosmolia-item-meta {
+  display: none;
+}
+.cosmolia-next,
+.cosmolia-prev {
+  position: absolute;
+  top: 50%;
+  margin-top: -10px;
+  width: 50px;
+  height: 50px;
+}
+.cosmolia-prev {
+  background-image: url(../demo/assets/img/arrow-previous.png);
+}
+.cosmolia-next {
+  left: auto;
+  right: 0;
+  background-image: url(../demo/assets/img/arrow-next.png);
+}
+.cosmolia-images-positioner {
+  height: 100%;
+}
+.cosmolia-cp-left > .cosmolia-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 20%;
+  top: 0px;
+  left: 0px;
+}
+.cosmolia-cp-left > .cosmolia-images-positioner {
+  margin-left: 20%;
+}
+.cosmolia-cp-right > .cosmolia-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 20%;
+  top: 0px;
+  right: 0px;
+}
+.cosmolia-cp-right > .cosmolia-images-positioner {
+  margin-right: 20%;
+}
+
+/*# sourceMappingURL=cosmolia.css.map */
