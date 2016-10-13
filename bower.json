@@ -2,8 +2,8 @@
   "name": "cosmolia",
   "description": "Javascript Scroller / Carousel / Image Gallery",
   "main": [
-    "dist/cosmolia.min.js"
-    "dist/cosmolia.min.css"
+    "dist/cosmolia.js"
+    "dist/cosmolia.css"
   ],
   "authors": [
     "Petar Sokarovski"

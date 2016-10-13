@@ -1,4 +1,4 @@
-Cosmolia.Renderers.Scroll = {
+export default {
 
     willRotate: function(gallery) {
         gallery.html.imagesSpan.css(gallery.directionDictionary.left, '');

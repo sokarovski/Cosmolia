@@ -1,1 +1,0 @@
-Cosmolia.Renderers = {};

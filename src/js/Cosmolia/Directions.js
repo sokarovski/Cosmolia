@@ -3,7 +3,7 @@
  * @readonly
  * @enum {number}
  */
-Cosmolia.Directions = {
+export default {
     VERTICAL:   1,
     HORIZONTAL: 2
 }

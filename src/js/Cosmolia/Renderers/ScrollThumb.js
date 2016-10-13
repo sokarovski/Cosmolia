@@ -1,5 +1,7 @@
-Cosmolia.Renderers.ScrollThumb = Object.create(Cosmolia.Renderers.Scroll);
-Cosmolia.Renderers.ScrollThumb.layout = function(gallery) {
+import Scroll from './Scroll.js';
+
+var ScrollThumb = Object.create(Scroll);
+ScrollThumb.layout = function(gallery) {
     gallery.html.imagesSpan.empty();
     var start = 0;
     var length = gallery.images.length;
@@ -15,3 +17,5 @@ Cosmolia.Renderers.ScrollThumb.layout = function(gallery) {
     }
     this.switchTo(gallery, gallery.selectedIndex);
 }
+
+export default ScrollThumb;

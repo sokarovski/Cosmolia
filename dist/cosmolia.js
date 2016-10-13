@@ -1,6 +1,27 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+exports.__esModule = true;
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _Scroll = require('./Cosmolia/Renderers/Scroll.js');
+
+var _Scroll2 = _interopRequireDefault(_Scroll);
+
+var _ScrollThumb = require('./Cosmolia/Renderers/ScrollThumb.js');
+
+var _ScrollThumb2 = _interopRequireDefault(_ScrollThumb);
+
+var _Positions = require('./Cosmolia/Positions.js');
+
+var _Positions2 = _interopRequireDefault(_Positions);
+
+var _Directions = require('./Cosmolia/Directions.js');
+
+var _Directions2 = _interopRequireDefault(_Directions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -8,7 +29,7 @@ var Cosmolia = function () {
 
     /* @PRAGMA Initialization =============================================== */
 
-    //@TODO Not needed in babel kept for documenting
+    //@TODO Not needed for ES kept for documenting
 
     // parent = null;
     // images = null;
@@ -127,17 +148,17 @@ var Cosmolia = function () {
             var carousel = this.getCarousel();
             carousel.haltRendering();
 
-            if (position & Cosmolia.Positions.BOTTOM) {
+            if (position & _Positions2.default.BOTTOM) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
+                this.carousel.setDirection(_Directions2.default.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position & Cosmolia.Positions.TOP) {
+            } else if (position & _Positions2.default.TOP) {
                 this.html.wrapper.prepend(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
+                this.carousel.setDirection(_Directions2.default.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position & (Cosmolia.Directions.LEFT | Cosmolia.Directions.RIGHT)) {
+            } else if (position & (_Directions2.default.LEFT | _Directions2.default.RIGHT)) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.VERTICAL);
+                this.carousel.setDirection(_Directions2.default.VERTICAL);
                 this.carousel.setProportion('100%');
             }
 
@@ -228,7 +249,7 @@ var Cosmolia = function () {
         this.carouselFixedProportion = fixedProportion;
         this.carouselRelativeProportion = relativeProportion;
         if (this.carousel) {
-            if (this.carouselPosition & (Cosmolia.Positions.LEFT | Cosmolia.Positions.RIGHT)) {
+            if (this.carouselPosition & (_Positions2.default.LEFT | _Positions2.default.RIGHT)) {
                 this.placeCarousel();
             } else {
                 this.carousel.setProportion(fixedProportion, relativeProportion);
@@ -285,7 +306,7 @@ var Cosmolia = function () {
 
         if (this.renderer) this.renderer.willRotate(this);
 
-        if (direction == Cosmolia.Directions.VERTICAL) this.directionDictionary = { 'left': 'top', 'width': 'height' };else if (direction == Cosmolia.Directions.HORIZONTAL) this.directionDictionary = { 'left': 'left', 'width': 'width' };
+        if (direction == _Directions2.default.VERTICAL) this.directionDictionary = { 'left': 'top', 'width': 'height' };else if (direction == _Directions2.default.HORIZONTAL) this.directionDictionary = { 'left': 'left', 'width': 'width' };
     };
 
     Cosmolia.prototype.setOnImageClick = function setOnImageClick(callback) {
@@ -378,8 +399,8 @@ var Cosmolia = function () {
 
         this.haltRendering();
 
-        this.setDirection(opts.direction || Cosmolia.Directions.HORIZONTAL);
-        this.setRenderer(opts.renderer || Cosmolia.Renderers.Scroll);
+        this.setDirection(opts.direction || _Directions2.default.HORIZONTAL);
+        this.setRenderer(opts.renderer || _Scroll2.default);
         this.setInterval(opts.interval || 4000);
         this.setAnimationSpeed(opts.animationSpeed || 300);
         this.setCarouselProportion(opts.carouselFixedProportion, opts.carouselRelativeProportion || 0.25);
@@ -433,7 +454,7 @@ var Cosmolia = function () {
             fixedProportion: this.carouselFixedProportion,
             relativeProportion: this.carouselRelativeProportion,
             autoplay: false,
-            renderer: Cosmolia.Renderers.ScrollThumb,
+            renderer: _ScrollThumb2.default,
             carouselPosition: null,
             showInfo: false,
             showCounter: false,
@@ -511,11 +532,11 @@ var Cosmolia = function () {
         var factor = this.evaluateCarouselProportion();
         var margins = { 'margin-left': '0', 'margin-right': '0' };
         var width = '';
-        if (position & Cosmolia.Positions.LEFT) {
+        if (position & _Positions2.default.LEFT) {
             margins['margin-right'] = factor;
             width = factor;
         }
-        if (position & Cosmolia.Positions.RIGHT) {
+        if (position & _Positions2.default.RIGHT) {
             margins['margin-left'] = factor;
             width = factor;
         }
@@ -632,210 +653,77 @@ var Cosmolia = function () {
         if (this.data.slideCaches['cache_' + index]) return this.data.slideCaches['cache_' + index];
     };
 
-    Cosmolia.jQueryPlugin = function jQueryPlugin(methodOrOptions) {
-
-        if (!jQuery(this).length) {
-            return jQuery(this);
-        }
-
-        var instance = jQuery(this).data('Cosmolia');
-
-        // CASE: action method (public method on PLUGIN class)        
-        if (instance && methodOrOptions.indexOf('_') != 0 && instance[methodOrOptions] && typeof instance[methodOrOptions] == 'function') {
-
-            return instance[methodOrOptions](Array.prototype.slice.call(arguments, 1));
-
-            // CASE: argument is options object or empty = initialise            
-        } else if ((typeof methodOrOptions === 'undefined' ? 'undefined' : _typeof(methodOrOptions)) === 'object' || !methodOrOptions) {
-
-            instance = new Cosmolia(jQuery(this), methodOrOptions); // ok to overwrite if this is a re-init
-            jQuery(this).data('Cosmolia', instance);
-            return jQuery(this);
-
-            // CASE: method called before init
-        } else if (!instance) {
-            jQuery.error('Cosmolia must be initialised before using method: ' + methodOrOptions);
-
-            // CASE: invalid method
-        } else {
-            jQuery.error('Method ' + methodOrOptions + ' does not exist.');
-        }
-    };
-
     return Cosmolia;
 }();
 
-Cosmolia.Positions = {
-    TOP: 1,
-    RIGHT: 2,
-    BOTTOM: 4,
-    LEFT: 8
-};
-Cosmolia.Directions = {
-    VERTICAL: 1,
-    HORIZONTAL: 2
+if (jQuery) jQuery.fn.Cosmolia = function (methodOrOptions) {
+
+    if (!jQuery(this).length) {
+        return jQuery(this);
+    }
+
+    var instance = jQuery(this).data('Cosmolia');
+
+    // CASE: action method (public method on PLUGIN class)        
+    if (instance && methodOrOptions.indexOf('_') != 0 && instance[methodOrOptions] && typeof instance[methodOrOptions] == 'function') {
+
+        return instance[methodOrOptions](Array.prototype.slice.call(arguments, 1));
+
+        // CASE: argument is options object or empty = initialise            
+    } else if ((typeof methodOrOptions === 'undefined' ? 'undefined' : _typeof(methodOrOptions)) === 'object' || !methodOrOptions) {
+        instance = new Cosmolia(jQuery(this), methodOrOptions); // ok to overwrite if this is a re-init
+        jQuery(this).data('Cosmolia', instance);
+        return jQuery(this);
+
+        // CASE: method called before init
+    } else if (!instance) {
+        jQuery.error('Cosmolia must be initialised before using method: ' + methodOrOptions);
+
+        // CASE: invalid method
+    } else {
+        jQuery.error('Method ' + methodOrOptions + ' does not exist.');
+    }
 };
 
+if (window) window.Cosmolia = Cosmolia;
 
-jQuery.fn.Cosmolia = Cosmolia.jQueryPlugin;
+exports.default = Cosmolia;
+
+},{"./Cosmolia/Directions.js":2,"./Cosmolia/Positions.js":3,"./Cosmolia/Renderers/Scroll.js":4,"./Cosmolia/Renderers/ScrollThumb.js":5}],2:[function(require,module,exports){
 "use strict";
 
+exports.__esModule = true;
 /**
  * Direction dictionary that holds the avaliable directions
  * @readonly
  * @enum {number}
  */
-Cosmolia.Directions = {
+exports.default = {
   VERTICAL: 1,
   HORIZONTAL: 2
 };
+
+},{}],3:[function(require,module,exports){
 "use strict";
 
+exports.__esModule = true;
 /**
  * Position dictionary that holds the avaliable positions
  * @readonly
  * @enum {number}
  */
-Cosmolia.Positions = {
+exports.default = {
   TOP: 1,
   RIGHT: 2,
   BOTTOM: 4,
   LEFT: 8
 };
-"use strict";
 
-Cosmolia.Renderers = {};
+},{}],4:[function(require,module,exports){
 'use strict';
 
-Cosmolia.Renderers.Basic = {
-
-    willRotate: function willRotate(gallery) {
-        gallery.html.imageSpan.css(gallery.directionDictionary.left, null);
-    },
-
-    layout: function layout(gallery) {
-        gallery.html.imagesSpan.empty();
-        gallery.html.imagesSpan.css('left', '0%');
-        var start = 0 - gallery.items;
-        var length = gallery.images.length + gallery.items;
-        gallery.resetSlideCache();
-        for (var i = start; i < length; i++) {
-            var slide = gallery.createSlide();
-            var realIndex = gallery.moduloIndex(i);
-            slide.css('width', gallery.itemsWidth + '%');
-            slide.css('left', i * gallery.itemsWidth + '%');
-            gallery.addSlideToCache(slide, i);
-            gallery.setSlideData(slide, realIndex);
-            gallery.html.imagesSpan.append(slide);
-        }
-        this.switchTo(gallery, gallery.selectedIndex);
-    },
-
-    next: function next(gallery) {
-        var index = gallery.getNextIndex();
-        this.change(gallery, index, true);
-    },
-
-    prev: function prev(gallery) {
-        var index = gallery.getPreviousIndex();
-        this.change(gallery, index, true);
-    },
-
-    moveTo: function moveTo(gallery, index) {
-        this.change(gallery, index, true);
-    },
-
-    switchTo: function switchTo(gallery, index) {
-        this.change(gallery, index, false);
-    },
-
-    change: function change(gallery, index, animated) {
-        var index = gallery.moduloIndex(index);
-        gallery.willStartSwitchingSlide(index, animated);
-        gallery.html.imagesSpan.css({ 'left': -1 * (index + gallery.offset) * gallery.itemsWidth + '%' });
-        gallery.didEndSwitchingSlide(index, animated);
-    }
-
-};
-'use strict';
-
-Cosmolia.Renderers.Opacity = {
-
-    willRotate: function willRotate(gallery) {
-        gallery.html.imageSpan.css(gallery.directionDictionary.left, null);
-    },
-
-    layout: function layout(gallery) {
-        gallery.html.imagesSpan.empty();
-        gallery.resetSlideCache();
-        for (var i = 0; i < gallery.images.length; i++) {
-            var slide = gallery.createSlide();
-            var realIndex = gallery.moduloIndex(i);
-            gallery.addSlideToCache(i, slide);
-            slide.css('opacity', 0);
-            gallery.setSlideData(slide, realIndex);
-            gallery.html.imagesSpan.append(slide);
-        }
-        this.switchTo(gallery, gallery.selectedIndex);
-    },
-
-    next: function next(gallery) {
-        var index = gallery.getNextIndex();
-        this.change(gallery, index, true, -1);
-    },
-
-    prev: function prev(gallery) {
-        var index = gallery.getPreviousIndex();
-        this.change(gallery, index, true, 1);
-    },
-
-    moveTo: function moveTo(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, true, 0);
-    },
-
-    switchTo: function switchTo(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, false);
-    },
-
-    change: function change(gallery, index, animated) {
-        var old = gallery.getSlideFromCache(gallery.selectedIndex);
-        gallery.willStartSwitchingSlide(index, animated);
-        var elem = gallery.getSlideFromCache(index);
-        if (elem) {
-            if (animated) {
-                elem.css({
-                    opacity: 0
-                });
-                gallery.html.imagesSpan.append(elem);
-                elem.animate({
-                    opacity: 1
-                }, gallery.animationSpeed, gallery.didEndSwitchingSlide(gallery, index, animated));
-            } else {
-                gallery.html.imagesSpan.append(elem);
-                elem.css({
-                    opacity: 1
-                });
-                gallery.didEndSwitchingSlide(index, animated);
-            }
-        }
-
-        if (old && old != elem) {
-            if (animated) {
-                old.delay(300).animate({
-                    opacity: 0
-                }, gallery.animationSpeed - 300);
-            } else {
-                old.css({ opacity: 0 });
-            }
-        }
-    }
-
-};
-'use strict';
-
-Cosmolia.Renderers.Scroll = {
+exports.__esModule = true;
+exports.default = {
 
     willRotate: function willRotate(gallery) {
         gallery.html.imagesSpan.css(gallery.directionDictionary.left, '');
@@ -902,10 +790,20 @@ Cosmolia.Renderers.Scroll = {
     }
 
 };
+
+},{}],5:[function(require,module,exports){
 'use strict';
 
-Cosmolia.Renderers.ScrollThumb = Object.create(Cosmolia.Renderers.Scroll);
-Cosmolia.Renderers.ScrollThumb.layout = function (gallery) {
+exports.__esModule = true;
+
+var _Scroll = require('./Scroll.js');
+
+var _Scroll2 = _interopRequireDefault(_Scroll);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ScrollThumb = Object.create(_Scroll2.default);
+ScrollThumb.layout = function (gallery) {
     gallery.html.imagesSpan.empty();
     var start = 0;
     var length = gallery.images.length;
@@ -921,40 +819,10 @@ Cosmolia.Renderers.ScrollThumb.layout = function (gallery) {
     }
     this.switchTo(gallery, gallery.selectedIndex);
 };
-'use strict';
 
-Cosmolia.Renderers.Slide = Object.create(Cosmolia.Renderers.Opacity);
-Cosmolia.Renderers.Slide.change = function (gallery, index, animated, direction) {
-    var old = gallery.getSlideFromCache(gallery.selectedIndex);
-    gallery.willStartSwitchingSlide(index, animated);
-    var elem = gallery.getSlideFromCache(index);
-    if (elem) {
-        if (animated) {
-            var css = { opacity: 0 };
-            css[gallery.directionDictionary.left] = direction * 100 + '%';
-            elem.css(css);
+exports.default = ScrollThumb;
 
-            gallery.html.imagesSpan.append(elem);
+},{"./Scroll.js":4}]},{},[1])
 
-            var css = { opacity: 1 };
-            css[gallery.directionDictionary.left] = 0;
-            elem.animate(css, gallery.animationSpeed, gallery.didEndSwitchingSlide(gallery, index, animated));
-        } else {
-            var css = { opacity: 1 };
-            css[gallery.directionDictionary.left] = 0;
-            gallery.html.imagesSpan.append(elem);
-            elem.css(css);
-            gallery.didEndSwitchingSlide(index, animated);
-        }
-    }
 
-    if (old && old != elem) {
-        if (animated) {
-            old.animate({
-                opacity: 0
-            }, gallery.animationSpeed);
-        } else {
-            old.css({ opacity: 0 });
-        }
-    }
-};
+//# sourceMappingURL=cosmolia.js.map

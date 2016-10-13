@@ -3,7 +3,7 @@
  * @readonly
  * @enum {number}
  */
-Cosmolia.Positions = {
+export default {
     TOP:        1,
     RIGHT:      2,
     BOTTOM:     4,

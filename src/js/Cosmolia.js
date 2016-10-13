@@ -1,8 +1,15 @@
+import Scroll from './Cosmolia/Renderers/Scroll.js';
+import ScrollThumb from './Cosmolia/Renderers/ScrollThumb.js';
+
+import POSITIONS from './Cosmolia/Positions.js';
+import DIRECTIONS from './Cosmolia/Directions.js';
+
 class Cosmolia {
 
     /* @PRAGMA Initialization =============================================== */
 
-    //@TODO Not needed in babel kept for documenting
+    //@TODO Map the redenrers and use string for the default ones and references for external ones
+    //@TODO Not needed for ES kept for documenting
 
     // parent = null;
     // images = null;
@@ -31,18 +38,6 @@ class Cosmolia {
     // html = null;
     // started = false;
     // rendering = null;
-    
-    static Positions = {
-        TOP:        1,
-        RIGHT:      2,
-        BOTTOM:     4,
-        LEFT:       8
-    };
-
-    static Directions = {
-        VERTICAL:   1,
-        HORIZONTAL: 2
-    };
 
     constructor(parent, opts) {
         opts = opts || {};
@@ -133,17 +128,17 @@ class Cosmolia {
             var carousel = this.getCarousel();
             carousel.haltRendering();
 
-            if (position & Cosmolia.Positions.BOTTOM) {
+            if (position & POSITIONS.BOTTOM) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
+                this.carousel.setDirection(DIRECTIONS.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position & Cosmolia.Positions.TOP) {
+            } else if (position & POSITIONS.TOP) {
                 this.html.wrapper.prepend(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.HORIZONTAL);
+                this.carousel.setDirection(DIRECTIONS.HORIZONTAL);
                 this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
-            } else if (position & (Cosmolia.Directions.LEFT | Cosmolia.Directions.RIGHT) ) {
+            } else if (position & (DIRECTIONS.LEFT | DIRECTIONS.RIGHT) ) {
                 this.html.wrapper.append(carousel.html.wrapper);
-                this.carousel.setDirection(Cosmolia.Directions.VERTICAL);
+                this.carousel.setDirection(DIRECTIONS.VERTICAL);
                 this.carousel.setProportion('100%');
             }
 
@@ -236,7 +231,7 @@ class Cosmolia {
         this.carouselFixedProportion = fixedProportion;
         this.carouselRelativeProportion = relativeProportion;
         if (this.carousel) {
-            if (this.carouselPosition & (Cosmolia.Positions.LEFT | Cosmolia.Positions.RIGHT)) {
+            if (this.carouselPosition & (POSITIONS.LEFT | POSITIONS.RIGHT)) {
                 this.placeCarousel();
             } else {
                 this.carousel.setProportion(fixedProportion, relativeProportion);
@@ -296,9 +291,9 @@ class Cosmolia {
         if (this.renderer) 
             this.renderer.willRotate(this);
         
-        if (direction == Cosmolia.Directions.VERTICAL)
+        if (direction == DIRECTIONS.VERTICAL)
             this.directionDictionary = {'left': 'top', 'width': 'height'};
-        else if (direction == Cosmolia.Directions.HORIZONTAL)
+        else if (direction == DIRECTIONS.HORIZONTAL)
             this.directionDictionary = {'left': 'left', 'width': 'width'};
     }
 
@@ -392,8 +387,8 @@ class Cosmolia {
 
         this.haltRendering();
 
-        this.setDirection(opts.direction || Cosmolia.Directions.HORIZONTAL);
-        this.setRenderer(opts.renderer || Cosmolia.Renderers.Scroll);
+        this.setDirection(opts.direction || DIRECTIONS.HORIZONTAL);
+        this.setRenderer(opts.renderer || Scroll);
         this.setInterval(opts.interval || 4000);
         this.setAnimationSpeed(opts.animationSpeed || 300);
         this.setCarouselProportion(opts.carouselFixedProportion, opts.carouselRelativeProportion||0.25);
@@ -447,7 +442,7 @@ class Cosmolia {
             fixedProportion: this.carouselFixedProportion,
             relativeProportion: this.carouselRelativeProportion,
             autoplay: false,
-            renderer: Cosmolia.Renderers.ScrollThumb,
+            renderer: ScrollThumb,
             carouselPosition: null,
             showInfo: false,
             showCounter: false,
@@ -526,11 +521,11 @@ class Cosmolia {
         var factor = this.evaluateCarouselProportion();
         var margins = {'margin-left':'0', 'margin-right':'0'};
         var width = '';
-        if (position & Cosmolia.Positions.LEFT) {
+        if (position & POSITIONS.LEFT) {
             margins['margin-right'] = factor;
             width = factor;
         }
-        if (position & Cosmolia.Positions.RIGHT) {
+        if (position & POSITIONS.RIGHT) {
             margins['margin-left'] = factor;
             width = factor;
         }
@@ -649,40 +644,43 @@ class Cosmolia {
             return this.data.slideCaches['cache_' + index];
     }
 
+}
 
-    static jQueryPlugin( methodOrOptions ) {
+if (jQuery)
+jQuery.fn.Cosmolia = function( methodOrOptions ) {
 
-        if (!jQuery(this).length) {
-            return jQuery(this);
-        }
+    if (!jQuery(this).length) {
+        return jQuery(this);
+    }
 
-        var instance = jQuery(this).data('Cosmolia');
-            
-        // CASE: action method (public method on PLUGIN class)        
-        if ( instance 
-                && methodOrOptions.indexOf('_') != 0 
-                && instance[ methodOrOptions ] 
-                && typeof( instance[ methodOrOptions ] ) == 'function' ) {
-            
-            return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
-                
-                
-        // CASE: argument is options object or empty = initialise            
-        } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
-
-            instance = new Cosmolia( jQuery(this), methodOrOptions );    // ok to overwrite if this is a re-init
-            jQuery(this).data( 'Cosmolia', instance );
-            return jQuery(this);
+    var instance = jQuery(this).data('Cosmolia');
         
-        // CASE: method called before init
-        } else if ( !instance ) {
-            jQuery.error( 'Cosmolia must be initialised before using method: ' + methodOrOptions );
+    // CASE: action method (public method on PLUGIN class)        
+    if ( instance 
+            && methodOrOptions.indexOf('_') != 0 
+            && instance[ methodOrOptions ] 
+            && typeof( instance[ methodOrOptions ] ) == 'function' ) {
         
-        // CASE: invalid method
-        } else {
-            jQuery.error( 'Method ' +  methodOrOptions + ' does not exist.' );
-        }
+        return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
+            
+            
+    // CASE: argument is options object or empty = initialise            
+    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
+        instance = new Cosmolia( jQuery(this), methodOrOptions );    // ok to overwrite if this is a re-init
+        jQuery(this).data( 'Cosmolia', instance );
+        return jQuery(this);
+    
+    // CASE: method called before init
+    } else if ( !instance ) {
+        jQuery.error( 'Cosmolia must be initialised before using method: ' + methodOrOptions );
+    
+    // CASE: invalid method
+    } else {
+        jQuery.error( 'Method ' +  methodOrOptions + ' does not exist.' );
     }
 }
 
-jQuery.fn.Cosmolia = Cosmolia.jQueryPlugin;
+if (window)
+window.Cosmolia = Cosmolia;
+
+export default Cosmolia;
