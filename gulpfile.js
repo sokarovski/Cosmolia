@@ -8,9 +8,25 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var babelify = require("babelify");
+var plato = require('gulp-plato');
 
 gulp.task('default', ['concat']);
-gulp.task('build', ['concat', 'minify']);
+gulp.task('build', ['plato', 'concat', 'minify']);
+
+gulp.task('plato', function () {
+    return gulp.src('./src/**/*.js')
+        .pipe(plato('report', {
+            jshint: {
+                options: {
+                    strict: true
+                }
+            },
+            complexity: {
+                trycatch: true
+            }
+        }));
+});
+
 
 gulp.task('concat', ['concat.js', 'concat.css']);
 

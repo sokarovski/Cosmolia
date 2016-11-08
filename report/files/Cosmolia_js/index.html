@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - Cosmolia.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>Cosmolia.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">67.30</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">687</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">100.03</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">6.57</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">import Scroll from &#039;./Cosmolia/Renderers/Scroll.js&#039;;
+import ScrollThumb from &#039;./Cosmolia/Renderers/ScrollThumb.js&#039;;
+
+import POSITIONS from &#039;./Cosmolia/Positions.js&#039;;
+import DIRECTIONS from &#039;./Cosmolia/Directions.js&#039;;
+
+class Cosmolia {
+
+    /* @PRAGMA Initialization =============================================== */
+
+    //@TODO Map the redenrers and use string for the default ones and references for external ones
+    //@TODO Not needed for ES kept for documenting
+
+    // parent = null;
+    // images = null;
+    // selectedIndex = 0;
+    // renderer = null;
+    // parser = null;
+    // hasControlButtons = null;
+    // pauseOnHover = null;
+    // interval = null;
+    // animationSpeed = null;
+    // fixedProportion = null;
+    // relativeProportion = null;
+    // direction = null; //VERTICAL; HORIZONTAL;
+    // directionDictionary = null;
+    // data = null;
+    // carousel = null;
+    // carouselPosition = null; //TOP; RIGHT; BOTTOM; LEFT;
+    // carouselFixedProportion = null;
+    // carouselRelativeProportion = null;
+    // items = null;
+    // paused = null;
+    // reseponsive = null;
+    // offset = null;
+    // carouselOffset = null;
+    // timer = null;
+    // html = null;
+    // started = false;
+    // rendering = null;
+
+    constructor(parent, opts) {
+        opts = opts || {};
+
+        this.data = {};
+        this.html = {};
+        this.images = [];
+        this.rendering = true;
+        this.started = false;
+        this.parent = jQuery(parent);
+        this.autoplay = opts.autoplay !== false;
+        this.parser = opts.parser || null;
+        
+        this.initResponsive();
+        this.parseImages();
+        this.buildLayout();
+        this.layout(opts);
+
+        if (this.autoplay) 
+            this.start();
+    }
+    
+
+    /* @PRAGMA Basic Encapsulation ========================================== */
+
+    setRenderer(renderer) {
+        this.renderer = renderer;
+        this.layoutImages();
+    }
+
+    setImages(images) {
+        this.images = images;
+        if (this.carousel) {
+            this.carousel.setImages(images);
+        }
+        this.selectedIndex = 0;
+        this.layoutImages();
+    }
+
+    addImage(image) {
+        this.images.push(image);
+        this.layoutImages();
+    }
+
+    clearImages() {
+        this.images = [];
+        if (this.carousel) {
+            this.carousel.setImages(this.images);
+        }
+        this.selectedIndex = 0;
+        this.layoutImages();
+    }
+
+    setShowInfo(isVisible) {
+        this.showInfo = isVisible;
+        if (isVisible) {
+            this.html.wrapper.removeClass(&#039;cosmolia-st-no-info&#039;);
+        } else {
+            this.html.wrapper.addClass(&#039;cosmolia-st-no-info&#039;);
+        }
+    }
+
+    setShowCounter(isVisible) {
+        this.showCounter = isVisible;
+        if (this.showCounter) {
+            this.html.wrapper.removeClass(&#039;cosmolia-st-no-counter&#039;);
+        } else {
+            this.html.wrapper.addClass(&#039;cosmolia-st-no-counter&#039;);
+        }
+    }
+
+    setPauseOnHover(shouldPause) {
+        if (this.pauseOnHover == shouldPause) {
+            return;
+        }
+        this.pauseOnHover = shouldPause;
+        this.html.imagesSpan.off(&#039;mouseenter.cosmolia&#039;);
+        this.html.imagesSpan.off(&#039;mouseleave.cosmolia&#039;);
+        if (shouldPause &amp;&amp; this.autoplay) {
+            this.html.wrapper.on(&#039;mouseenter.cosmolia&#039;, this.pausePlay.bind(this));
+            this.html.wrapper.on(&#039;mouseleave.cosmolia&#039;, this.continuePlay.bind(this));
+        }
+    }
+
+    setCarouselPosition(position) {
+        if (position) {
+            this.carouselPosition = position;
+            var carousel = this.getCarousel();
+            carousel.haltRendering();
+
+            if (position &amp; POSITIONS.BOTTOM) {
+                this.html.wrapper.append(carousel.html.wrapper);
+                this.carousel.setDirection(DIRECTIONS.HORIZONTAL);
+                this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
+            } else if (position &amp; POSITIONS.TOP) {
+                this.html.wrapper.prepend(carousel.html.wrapper);
+                this.carousel.setDirection(DIRECTIONS.HORIZONTAL);
+                this.carousel.setProportion(this.carouselFixedProportion, this.carouselRelativeProportion);
+            } else if (position &amp; (DIRECTIONS.LEFT | DIRECTIONS.RIGHT) ) {
+                this.html.wrapper.append(carousel.html.wrapper);
+                this.carousel.setDirection(DIRECTIONS.VERTICAL);
+                this.carousel.setProportion(&#039;100%&#039;);
+            }
+
+            this.placeCarousel();
+
+            this.html.wrapper.removeClass(&#039;cosmolia-cp-top cosmolia-cp-right cosmolia-cp-bottom cosmolia-cp-left&#039;);
+            this.html.wrapper.addClass(&#039;cosmolia-cp-&#039;+position);
+            carousel.resumeRendering();
+            carousel.layoutImages();
+        } else {
+            this.html.wrapper.removeClass(&#039;cosmolia-cp-top cosmolia-cp-right cosmolia-cp-bottom cosmolia-cp-left&#039;);
+            this.carouselPosition = null;
+            this.placeCarousel();
+            if (this.carousel) {
+                this.carousel.html.wrapper.detach();
+            }
+        }
+
+    }
+
+    setHasControllButtons(isVisible) {
+        this.hasControlButtons = isVisible;
+        if (this.hasControlButtons) {
+            this.html.prevButton.show();
+            this.html.nextButton.show();
+        } else {
+            this.html.prevButton.hide();
+            this.html.nextButton.hide();
+        }
+    }
+
+    setSlideData(slide, index) {
+        var image = this.images[index];
+        if (image) {
+            slide.css(&#039;background-image&#039;, &quot;url(&#039;&quot;+image.src+&quot;&#039;)&quot;);
+            slide.find(&#039;.cosmolia-item-title&#039;).text(image.title);
+            slide.find(&#039;.cosmolia-item-description&#039;).text(image.description);
+            slide.find(&#039;.cosmolia-item-counter&#039;).text(index+1 + &#039; / &#039; + this.images.length);
+
+            slide.off(&#039;click.cosmolia&#039;);
+            if (this.onImageClick) {
+                slide.attr(&#039;href&#039;, &#039;javascript:;&#039;);
+                slide.on(&#039;click.cosmolia&#039;, this.imageWasClicked.bind(this, index, image));
+            } else if (image.link) {
+                slide.attr(&#039;href&#039;, image.link);
+            } else {
+                slide.removeAttr(&#039;href&#039;);
+            }
+
+        }
+    }
+
+    setProportion(fixedProportion, relativeProportion) {
+        this.fixedProportion = fixedProportion;
+        this.relativeProportion = relativeProportion;
+        if (!fixedProportion &amp;&amp; !relativeProportion) {
+            //Do nothing
+        } else if (fixedProportion !== null) {
+            this.html.imagesHolder.css({
+                &#039;padding-bottom&#039;: 0,
+                &#039;height&#039; : fixedProportion
+            });
+            if (fixedProportion.indexOf(&#039;%&#039;) &gt; -1) {
+                this.html.wrapper.css({
+                    width: &#039;100%&#039;,
+                    position: &#039;absolute&#039;,
+                    height: &#039;100%&#039;
+                });
+            } else {
+                this.html.wrapper.css({
+                    width: &#039;&#039;,
+                    position: &#039;&#039;,
+                    height: &#039;&#039;
+                });
+            }
+        } else if (relativeProportion !== null) {
+            this.html.imagesHolder.css({
+                &#039;padding-bottom&#039;: (100*relativeProportion)+&#039;%&#039;,
+                &#039;height&#039; : 0
+            });
+            this.html.wrapper.css({
+                width: &#039;&#039;,
+                position: &#039;&#039;,
+                height: &#039;&#039;
+            });
+        }
+    }
+
+    setCarouselProportion(fixedProportion, relativeProportion) {
+        this.carouselFixedProportion = fixedProportion;
+        this.carouselRelativeProportion = relativeProportion;
+        if (this.carousel) {
+            if (this.carouselPosition &amp; (POSITIONS.LEFT | POSITIONS.RIGHT)) {
+                this.placeCarousel();
+            } else {
+                this.carousel.setProportion(fixedProportion, relativeProportion);
+            }
+
+        }
+    }
+
+    setItems(items) {
+        this.html.wrapper.removeClass(&#039;cosmolia-cp-items-1 cosmolia-cp-items-2 cosmolia-cp-items-3 cosmolia-cp-items-4&#039;);
+        this.html.wrapper.addClass(&#039;cosmolia-cp-items-&#039;+items);
+        this.items = items;
+        this.itemsWidth = (100/items);
+        this.layoutImages();
+    }
+
+    setCarouselItems(items) {
+        this.carouselItems = items;
+        if (this.carousel) {
+            this.carousel.setItems(items);
+        }
+    }
+
+    setOffset(offset) {
+        this.offset = offset;
+        if (this.rendering) {
+            this.renderer.switchTo(this, this.selectedIndex);
+        }
+    }
+
+    setCarouselOffset(offset) {
+        if (this.carousel) {
+            this.carousel.setOffset(offset);
+        }
+    }
+
+    setInterval(interval) {
+        this.interval = interval;
+        if (this.started) {
+            var pausedWas = this.paused;
+            this.stop();
+            this.start();
+            this.paused = pausedWas;
+        }
+    }
+
+    setAnimationSpeed(animationSpeed) {
+        this.animationSpeed = animationSpeed;
+    }
+
+    setDirection(direction) {
+        if (!direction)
+            return;
+
+        this.direction = direction;
+
+        if (this.renderer) 
+            this.renderer.willRotate(this);
+        
+        if (direction == DIRECTIONS.VERTICAL)
+            this.directionDictionary = {&#039;left&#039;: &#039;top&#039;, &#039;width&#039;: &#039;height&#039;};
+        else if (direction == DIRECTIONS.HORIZONTAL)
+            this.directionDictionary = {&#039;left&#039;: &#039;left&#039;, &#039;width&#039;: &#039;width&#039;};
+    }
+
+    setOnImageClick(callback) {
+        if (this.onImageClick !== null &amp;&amp; callback !== null) {
+            this.onImageClick = callback;
+        } else if (this.onImageClick != callback) {
+            this.onImageClick = callback;
+            this.layoutImages();
+        }
+    }
+
+    setImageContain(enabled) {
+        this.imageContain = enabled;
+        if (enabled) {
+            this.html.wrapper.addClass(&#039;cosmolia-images-style-contain&#039;);
+        } else {
+            this.html.wrapper.removeClass(&#039;cosmolia-images-style-contain&#039;);
+        }
+    }
+
+    setResponsive(responsive) {
+        if (responsive &amp;&amp; !this.isResponsiveSet) {
+            jQuery(window).on(&#039;resize&#039;, this.responsiveHandler);
+            this.lastWindowSize = 0;
+            this.isResponsiveSet = true;
+            this.onWindowResizeResponsive();
+        } else if (this.isResponsiveSet) {
+            jQuery(window).off(&#039;resize&#039;, this.responsiveHandler);
+            this.isResponsiveSet = false;
+            this.calculateImagesVisibility(10000000);
+        }
+    }
+
+    initResponsive() {
+        this.responsiveHandler = this.onWindowResizeResponsive.bind(this);
+    }
+
+    onWindowResizeResponsive() {
+        var newWidth = jQuery(window).width();
+        this.calculateImagesVisibility(newWidth);
+    }
+
+    calculateImagesVisibility(newWidth) {
+        if (this.lastWindowSize != 1 &amp;&amp; newWidth &lt; 769) {
+            this.lastWindowSize = 1;
+            this.setItems(1);
+        } else if (this.lastWindowSize != 2 &amp;&amp; newWidth &gt; 768) {
+            this.lastWindowSize = 2;
+            this.setItems(3);
+        }
+    }
+
+    /* @PRAGMA Layout Organization ========================================== */
+
+    buildLayout() {
+
+        var wrapper = jQuery(&#039;&lt;div class=&quot;cosmolia-wrapper&quot;&gt;&lt;/div&gt;&#039;);
+        var imagesPositioner = jQuery(&#039;&lt;div class=&quot;cosmolia-images-positioner&quot;&gt;&lt;/div&gt;&#039;);
+        var imagesHolder = jQuery(&#039;&lt;div class=&quot;cosmolia-images-sizer&quot;&gt;&lt;/div&gt;&#039;);
+        var imagesTube = jQuery(&#039;&lt;div class=&quot;cosmolia-images-tube&quot;&gt;&lt;/div&gt;&#039;);
+        var imagesSpan = jQuery(&#039;&lt;div class=&quot;cosmolia-images-span&quot;&gt;&lt;/div&gt;&#039;);
+
+        wrapper.append(imagesPositioner);
+        imagesPositioner.append(imagesHolder);
+        imagesHolder.append(imagesTube);
+        imagesTube.append(imagesSpan);
+
+        var prevButton = jQuery(&#039;&lt;a href=&quot;javascript:;&quot; class=&quot;cosmolia-prev&quot;&gt;&lt;/a&gt;&#039;);
+        var nextButton = jQuery(&#039;&lt;a href=&quot;javascript:;&quot; class=&quot;cosmolia-next&quot;&gt;&lt;/a&gt;&#039;);
+        imagesTube.append(prevButton);
+        imagesTube.append(nextButton);
+
+        prevButton.on(&#039;click&#039;, this.prev.bind(this));
+        nextButton.on(&#039;click&#039;, this.next.bind(this));
+
+        this.html.wrapper = wrapper;
+        this.html.imagesPositioner = imagesPositioner;
+        this.html.imagesHolder = imagesHolder;
+        this.html.imagesTube = imagesTube;
+        this.html.imagesSpan = imagesSpan;
+        this.html.prevButton = prevButton;
+        this.html.nextButton = nextButton;
+
+        this.parent.empty();
+        this.parent.append(wrapper);
+    }
+
+    layout(opts) {
+        opts = opts || {};
+
+        this.haltRendering();
+
+        this.setDirection(opts.direction || DIRECTIONS.HORIZONTAL);
+        this.setRenderer(opts.renderer || Scroll);
+        this.setInterval(opts.interval || 4000);
+        this.setAnimationSpeed(opts.animationSpeed || 300);
+        this.setCarouselProportion(opts.carouselFixedProportion, opts.carouselRelativeProportion||0.25);
+        this.setItems(opts.items || 1);
+        this.setShowInfo(opts.showInfo !== false);
+        this.setShowCounter(opts.showCounter !== false);
+        this.setPauseOnHover(opts.pauseOnHover !== false);
+        this.setCarouselPosition(opts.carouselPosition || null);
+        this.setHasControllButtons(opts.hasControllButtons !== false);
+        this.setProportion(opts.fixedProportion, opts.relativeProportion);
+        this.setCarouselItems(opts.carouselItems || 3);
+        this.setOffset(opts.offset || 0);
+        this.setCarouselOffset(opts.carouselOffset || -1);
+        this.setOnImageClick(opts.onImageClick || null);
+        this.setImageContain(!!opts.imageContain);
+        this.setResponsive(!!opts.responsive);
+
+        this.resumeRendering();
+
+        this.layoutImages();
+    }
+
+    layoutImages() {
+        if (this.rendering) {
+            this.renderer.layout(this);
+        }
+    }
+
+    createSlide() {
+        var slide = jQuery(&#039;&lt;a class=&quot;cosmolia-item&quot;&gt;&lt;/a&gt;&#039;);
+        var meta = jQuery(&#039;&lt;div class=&quot;cosmolia-item-meta&quot;&gt;&lt;/div&gt;&#039;);
+        var title = jQuery(&#039;&lt;div class=&quot;cosmolia-item-title&quot;&gt;&lt;/div&gt;&#039;);
+        var description = jQuery(&#039;&lt;div class=&quot;cosmolia-item-description&quot;&gt;&lt;/div&gt;&#039;);
+        var counter = jQuery(&#039;&lt;div class=&quot;cosmolia-item-counter&quot;&gt;&lt;/div&gt;&#039;);
+
+        slide.append(meta);
+        meta.append(counter);
+        meta.append(title);
+        meta.append(description);
+
+        return slide;
+    }
+
+    getCarousel() {
+        if (this.carousel) {
+            this.carousel.setImages(this.images);
+            return this.carousel;
+        }
+
+        this.carousel = new Cosmolia(null, {
+            fixedProportion: this.carouselFixedProportion,
+            relativeProportion: this.carouselRelativeProportion,
+            autoplay: false,
+            renderer: ScrollThumb,
+            carouselPosition: null,
+            showInfo: false,
+            showCounter: false,
+            hasControllButtons: false,
+            pauseOnHover: false,
+            items: this.carouselItems,
+            onImageClick: this.moveTo.bind(this)
+        });
+        this.carousel.setImages(this.images);
+        return this.carousel;
+    }
+
+    /* @PRAGMA Default Parser =============================================== */
+
+    parseImages() {
+        if (this.parser) {
+            this.parser(this.parent, this.images);
+            return null;
+        }
+
+        var images = this.parent.find(&#039;img&#039;);
+        var result = [];
+        for (var i=0; i&lt;images.length; i++) {
+            var image = jQuery(images[i]);
+            var source = image.attr(&#039;src&#039;);
+            result.push({
+                src: source,
+                title: image.attr(&#039;title&#039;),
+                description: &#039;&#039;,
+                link: source
+            });
+        }
+
+        this.images = result;
+        if (this.carousel) {
+            this.carousel.images = result;
+        }
+
+    }
+
+    /* @PRAGMA Internal Control Functions =================================== */
+
+    imageWasClicked(index, image) {
+        this.onImageClick(index, image);
+    }
+
+    getNextIndex() {
+        return this.moduloIndex(this.selectedIndex+1);
+    }
+
+    getPreviousIndex() {
+        return this.moduloIndex(this.selectedIndex-1);
+    }
+
+    moduloIndex(index) {
+        if (index &lt; 0) {
+            while(index &lt; 0 &amp;&amp; this.images.length &gt; 0) {
+                index += this.images.length;
+            }
+        }
+
+        return Math.abs(index%this.images.length);
+    }
+
+    evaluateCarouselProportion() {
+        if (this.carouselFixedProportion !== null) {
+            return this.carouselFixedProportion;
+        } else if (this.carouselRelativeProportion !== null) {
+            return (this.carouselRelativeProportion * 100) + &#039;%&#039;;
+        }
+        return &#039;50px;&#039;;
+    }
+
+    placeCarousel() {
+        var position = this.carouselPosition;
+        var factor = this.evaluateCarouselProportion();
+        var margins = {&#039;margin-left&#039;:&#039;0&#039;, &#039;margin-right&#039;:&#039;0&#039;};
+        var width = &#039;&#039;;
+        if (position &amp; POSITIONS.LEFT) {
+            margins[&#039;margin-right&#039;] = factor;
+            width = factor;
+        }
+        if (position &amp; POSITIONS.RIGHT) {
+            margins[&#039;margin-left&#039;] = factor;
+            width = factor;
+        }
+        
+        this.html.imagesPositioner.css(margins);
+
+        if (this.carousel) {
+            this.carousel.html.wrapper.css(&#039;width&#039;, width);
+        }
+    }
+
+    /* @PRAGMA Control Functions ============================================ */
+
+    switchTo(index) {
+        this.renderer.switchTo(this, index);
+    }
+
+    moveTo(index) {
+        this.renderer.moveTo(this, index);
+    }
+
+    next() {
+        this.renderer.next(this);
+    }
+
+    prev() {
+        this.renderer.prev(this);
+    }
+
+    start() {
+        if (this.started) {
+            return;
+        }
+        this.timer = setInterval(this.step.bind(this), this.interval);
+        this.started = true;
+        this.paused = false;
+    }
+
+    stop() {
+        clearInterval(this.timer);
+        this.started = false;
+        this.paused = true;
+    }
+
+    pausePlay() {
+        this.paused = true;
+    }
+
+    continuePlay() {
+        this.paused = false;
+    }
+
+    step() {
+        if (!this.paused) {
+            this.next();
+        }
+    }
+
+    /* @PRAGMA Renderer Delegate Implementations ============================ */
+
+    willStartSwitchingSlide(toIndex, animated) {
+        this.selectedIndex = toIndex || 0;
+        if (this.carousel) {
+            if (animated) {
+                this.carousel.moveTo(toIndex);
+            } else {
+                this.carousel.switchTo(toIndex);
+            }
+        }
+
+        //This logic should be moved inside the renderers
+        this.clearActiveSlide();
+    }
+
+    didEndSwitchingSlide(toIndex, animated) {
+        //This logic should be moved inside the renderers
+        this.markActiveSlide(toIndex);
+    }
+
+    /* @PRAGMA Rendere Controll ============================================= */
+
+    haltRendering() {
+        this.rendering = false;
+    }
+
+    resumeRendering() {
+        this.rendering = true;
+    }
+
+    /* @PRAGMA Mark Active Slide ============================================ */
+
+    clearActiveSlide() {
+        //This logic should be moved inside the renderers
+        this.html.imagesSpan.find(&#039;.cosmolia-active-slide&#039;).removeClass(&#039;cosmolia-active-slide&#039;);
+    }
+
+    markActiveSlide(index) {
+        //This logic should be moved inside the renderers
+        var element = this.getSlideFromCache(index);
+        if (element)
+            element.addClass(&#039;cosmolia-active-slide&#039;);
+    }
+
+    /* @PRAGMA Slide Caching for The renderer =============================== */
+
+    resetSlideCache() {
+        this.data.slideCaches = {};
+    }
+
+    addSlideToCache(index, slide) {
+        this.data.slideCaches[&#039;cache_&#039; + index] = slide;
+    }
+
+    getSlideFromCache(index) {
+        if (this.data.slideCaches[&#039;cache_&#039; + index])
+            return this.data.slideCaches[&#039;cache_&#039; + index];
+    }
+
+}
+
+if (jQuery)
+jQuery.fn.Cosmolia = function (methodOrOptions) {
+    &#039;use strict&#039;;
+
+    if (!jQuery(this).length) {
+        return jQuery(this);
+    }
+
+    var instance = jQuery(this).data(&#039;Cosmolia&#039;);
+        
+    // CASE: action method (public method on PLUGIN class)        
+    if (instance &amp;&amp;
+        methodOrOptions.indexOf(&#039;_&#039;) !== 0 &amp;&amp;
+        instance[ methodOrOptions ] &amp;&amp;
+        typeof( instance[ methodOrOptions ] ) === &#039;function&#039;) {
+        
+        return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
+            
+            
+    // CASE: argument is options object or empty = initialise            
+    } else if ( typeof methodOrOptions === &#039;object&#039; || ! methodOrOptions ) {
+        instance = new Cosmolia( jQuery(this), methodOrOptions );    // ok to overwrite if this is a re-init
+        jQuery(this).data( &#039;Cosmolia&#039;, instance );
+        return jQuery(this);
+    
+    // CASE: method called before init
+    } else if ( !instance ) {
+        jQuery.error( &#039;Cosmolia must be initialised before using method: &#039; + methodOrOptions );
+    
+    // CASE: invalid method
+    } else {
+        jQuery.error( &#039;Method &#039; +  methodOrOptions + &#039; does not exist.&#039; );
+    }
+};
+
+if (window)
+window.Cosmolia = Cosmolia;
+
+export default Cosmolia;</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ cyclomatic }} <br>
+    Length : {{ halstead.length }} <br>
+    Difficulty : {{ halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

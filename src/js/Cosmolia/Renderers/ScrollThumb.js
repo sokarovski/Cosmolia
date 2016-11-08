@@ -1,7 +1,9 @@
 import Scroll from './Scroll.js';
 
 var ScrollThumb = Object.create(Scroll);
-ScrollThumb.layout = function(gallery) {
+ScrollThumb.layout = function (gallery) {
+    'use strict';
+
     gallery.html.imagesSpan.empty();
     var start = 0;
     var length = gallery.images.length;
@@ -16,6 +18,6 @@ ScrollThumb.layout = function(gallery) {
         gallery.html.imagesSpan.append(slide);
     }
     this.switchTo(gallery, gallery.selectedIndex);
-}
+};
 
 export default ScrollThumb;

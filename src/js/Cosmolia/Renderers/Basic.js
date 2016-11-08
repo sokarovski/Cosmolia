@@ -1,10 +1,14 @@
 Cosmolia.Renderers.Basic = {
     
     willRotate: function(gallery) {
+        'use strict';
+
         gallery.html.imageSpan.css(gallery.directionDictionary.left, null);
     },
 
     layout: function(gallery) {
+        'use strict';
+
         gallery.html.imagesSpan.empty();
         gallery.html.imagesSpan.css('left', '0%');
         var start = 0-gallery.items;
@@ -23,28 +27,38 @@ Cosmolia.Renderers.Basic = {
     },
 
     next: function(gallery) {
+        'use strict';
+
         var index = gallery.getNextIndex();
         this.change(gallery, index, true);
     },
 
     prev: function(gallery) {
+        'use strict';
+
         var index = gallery.getPreviousIndex();
         this.change(gallery, index, true);
     },
 
     moveTo: function(gallery, index) {
+        'use strict';
+
         this.change(gallery, index, true);
     },
 
     switchTo: function(gallery, index) {
+        'use strict';
+
         this.change(gallery, index, false);
     },
 
     change: function(gallery, index, animated) {
-        var index = gallery.moduloIndex(index);
-        gallery.willStartSwitchingSlide(index, animated);
-        gallery.html.imagesSpan.css({'left': (-1*(index+gallery.offset)*gallery.itemsWidth)+'%' });
-        gallery.didEndSwitchingSlide(index, animated);
+        'use strict';
+
+        var newIndex = gallery.moduloIndex(index);
+        gallery.willStartSwitchingSlide(newIndex, animated);
+        gallery.html.imagesSpan.css({'left': (-1*(newIndex+gallery.offset)*gallery.itemsWidth)+'%' });
+        gallery.didEndSwitchingSlide(newIndex, animated);
     }
 
 };

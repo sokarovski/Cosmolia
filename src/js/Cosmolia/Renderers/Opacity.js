@@ -1,10 +1,14 @@
 Cosmolia.Renderers.Opacity = {
 
     willRotate: function(gallery) {
+        'use strict';
+
         gallery.html.imageSpan.css(gallery.directionDictionary.left, null);
     },
 
     layout: function(gallery) {
+        'use strict';
+
         gallery.html.imagesSpan.empty();
         gallery.resetSlideCache();
         for (var i=0; i<gallery.images.length; i++) {
@@ -19,26 +23,36 @@ Cosmolia.Renderers.Opacity = {
     },
 
     next: function(gallery) {
+        'use strict';
+
         var index = gallery.getNextIndex();
         this.change(gallery, index, true, -1);
     },
 
     prev: function(gallery) {
+        'use strict';
+
         var index = gallery.getPreviousIndex();
         this.change(gallery, index, true, 1);
     },
 
     moveTo: function(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, true, 0);
+        'use strict';
+
+        var newIndex = gallery.moduloIndex(index);
+        this.change(gallery, newIndex, true, 0);
     },
 
     switchTo: function(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, false);
+        'use strict';
+
+        var newIndex = gallery.moduloIndex(index);
+        this.change(gallery, newIndex, false);
     },
 
     change: function(gallery, index, animated) {
+        'use strict';
+
         var old = gallery.getSlideFromCache(gallery.selectedIndex);
         gallery.willStartSwitchingSlide(index, animated);
         var elem = gallery.getSlideFromCache(index);

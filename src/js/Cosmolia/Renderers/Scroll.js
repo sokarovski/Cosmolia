@@ -1,10 +1,14 @@
 export default {
 
     willRotate: function(gallery) {
+        'use strict';
+
         gallery.html.imagesSpan.css(gallery.directionDictionary.left, '');
     },
 
     layout: function(gallery) {
+        'use strict';
+
         gallery.html.imagesSpan.empty();
         var start = 0-gallery.items;
         var length = gallery.images.length+gallery.items;
@@ -22,6 +26,8 @@ export default {
     },
 
     next: function(gallery) {
+        'use strict';
+
         var oldIndex = gallery.selectedIndex;
         var index = gallery.getNextIndex();
         var through = index <= oldIndex ? oldIndex+1 : null;
@@ -29,6 +35,8 @@ export default {
     },
 
     prev: function(gallery) {
+        'use strict';
+
         var oldIndex = gallery.selectedIndex;
         var index = gallery.getPreviousIndex();
         var through = index >= oldIndex ? oldIndex-1 : null;
@@ -36,16 +44,22 @@ export default {
     },
 
     moveTo: function(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, true, true);
+        'use strict';
+
+        var newIndex = gallery.moduloIndex(index);
+        this.change(gallery, newIndex, true, true);
     },
 
     switchTo: function(gallery, index) {
-        var index = gallery.moduloIndex(index);
-        this.change(gallery, index, false, false);
+        'use strict';
+
+        var newIndex = gallery.moduloIndex(index);
+        this.change(gallery, newIndex, false, false);
     },
 
     change: function(gallery, index, animated, animate, through) {
+        'use strict';
+
         gallery.willStartSwitchingSlide(index, animated);
         if (animate) {
             var callback;

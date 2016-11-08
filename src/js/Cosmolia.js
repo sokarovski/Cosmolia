@@ -196,7 +196,7 @@ class Cosmolia {
         this.relativeProportion = relativeProportion;
         if (!fixedProportion && !relativeProportion) {
             //Do nothing
-        } else if (fixedProportion != null) {
+        } else if (fixedProportion !== null) {
             this.html.imagesHolder.css({
                 'padding-bottom': 0,
                 'height' : fixedProportion
@@ -214,7 +214,7 @@ class Cosmolia {
                     height: ''
                 });
             }
-        } else if (relativeProportion != null) {
+        } else if (relativeProportion !== null) {
             this.html.imagesHolder.css({
                 'padding-bottom': (100*relativeProportion)+'%',
                 'height' : 0
@@ -298,7 +298,7 @@ class Cosmolia {
     }
 
     setOnImageClick(callback) {
-        if (this.onImageClick != null && callback != null) {
+        if (this.onImageClick !== null && callback !== null) {
             this.onImageClick = callback;
         } else if (this.onImageClick != callback) {
             this.onImageClick = callback;
@@ -508,12 +508,12 @@ class Cosmolia {
     }
 
     evaluateCarouselProportion() {
-        if (this.carouselFixedProportion != null) {
+        if (this.carouselFixedProportion !== null) {
             return this.carouselFixedProportion;
-        } else if (this.carouselRelativeProportion != null) {
-            return (this.carouselRelativeProportion*100)+'%';
+        } else if (this.carouselRelativeProportion !== null) {
+            return (this.carouselRelativeProportion * 100) + '%';
         }
-        return '50px;'
+        return '50px;';
     }
 
     placeCarousel() {
@@ -647,7 +647,8 @@ class Cosmolia {
 }
 
 if (jQuery)
-jQuery.fn.Cosmolia = function( methodOrOptions ) {
+jQuery.fn.Cosmolia = function (methodOrOptions) {
+    'use strict';
 
     if (!jQuery(this).length) {
         return jQuery(this);
@@ -656,10 +657,10 @@ jQuery.fn.Cosmolia = function( methodOrOptions ) {
     var instance = jQuery(this).data('Cosmolia');
         
     // CASE: action method (public method on PLUGIN class)        
-    if ( instance 
-            && methodOrOptions.indexOf('_') != 0 
-            && instance[ methodOrOptions ] 
-            && typeof( instance[ methodOrOptions ] ) == 'function' ) {
+    if (instance &&
+        methodOrOptions.indexOf('_') !== 0 &&
+        instance[ methodOrOptions ] &&
+        typeof( instance[ methodOrOptions ] ) === 'function') {
         
         return instance[ methodOrOptions ]( Array.prototype.slice.call( arguments, 1 ) ); 
             
@@ -678,7 +679,7 @@ jQuery.fn.Cosmolia = function( methodOrOptions ) {
     } else {
         jQuery.error( 'Method ' +  methodOrOptions + ' does not exist.' );
     }
-}
+};
 
 if (window)
 window.Cosmolia = Cosmolia;
